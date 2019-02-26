@@ -11,6 +11,7 @@
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
+const { applyPaths } = require('./apply-config');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
@@ -96,7 +97,7 @@ module.exports = {
 const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
 
 // config before eject: we're in ./node_modules/react-scripts/config/
-module.exports = {
+module.exports = applyPaths({
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
@@ -117,7 +118,7 @@ module.exports = {
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
   appTypeDeclarations: resolveApp('src/react-app-env.d.ts'),
   ownTypeDeclarations: resolveOwn('lib/react-app.d.ts'),
-};
+});
 
 const ownPackageJson = require('../package.json');
 const reactScriptsPath = resolveApp(`node_modules/${ownPackageJson.name}`);
