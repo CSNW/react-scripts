@@ -59,6 +59,7 @@
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
     "resolve": "1.10.0",
+    "sanitize-filename": "^1.6.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "1.2.2",
