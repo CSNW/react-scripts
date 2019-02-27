@@ -29,7 +29,7 @@ function applyWebpackConfig(webpack_config) {
 }
 
 function withCRA(next_config = {}) {
-  const { src = 'src', public = 'public', pages, build = 'build', dist } =
+  const { src = 'src', public = 'public', pages, build = 'build' } =
     next_config.cra || {};
 
   const appSrc = resolve(src);
@@ -37,9 +37,10 @@ function withCRA(next_config = {}) {
   const appBuild = resolve(build);
   const appIndexJs = join(appSrc, pages ? pages.index : 'index.js');
   const appHtml = join(appPublic, 'index.html');
+  const appTypeDeclarations = join(appSrc, 'react-app-env.d.ts');
 
   return Object.assign({}, next_config, {
-    cra: { appSrc, appPublic, appBuild, appIndexJs, appHtml },
+    cra: { appSrc, appPublic, appBuild, appIndexJs, appHtml, appTypeDeclarations },
 
     webpack(config, { dev }) {
       if (pages) {
