@@ -28,21 +28,6 @@ function applyWebpackConfig(webpack_config) {
   });
 }
 
-const MINIFY_HTML = {
-  minify: {
-    removeComments: true,
-    collapseWhitespace: true,
-    removeRedundantAttributes: true,
-    useShortDoctype: true,
-    removeEmptyAttributes: true,
-    removeStyleLinkTypeAttributes: true,
-    keepClosingSlash: true,
-    minifyJS: true,
-    minifyCSS: true,
-    minifyURLs: true,
-  },
-};
-
 function withCRA(next_config = {}) {
   const { src = 'src', public = 'public', pages, build = 'build', dist } =
     next_config.cra || {};
@@ -60,22 +45,18 @@ function withCRA(next_config = {}) {
       if (pages) {
         const entries = {};
         const plugins = [];
+        const loader = require.resolve('./html-loader');
+
         for (let [target, entry] of Object.entries(pages)) {
           const name = sanitize(target);
           target = join(appPublic, `${target}.html`);
 
           entries[name] = join(appSrc, entry);
           plugins.push(
-            new HtmlWebpackPlugin(
-              Object.assign(
-                {
-                  inject: true,
-                  template: target,
-                  chunks: [name],
-                },
-                !dev ? MINIFY_HTML : undefined
-              )
-            )
+            new HtmlWebpackPlugin({
+              template: `${loader}!${target}`,
+              chunks: [name],
+            })
           );
         }
 
