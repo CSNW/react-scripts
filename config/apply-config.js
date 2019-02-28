@@ -1,4 +1,4 @@
-const { join, resolve } = require('path');
+const { join, resolve, relative } = require('path');
 const { existsSync } = require('fs');
 const uuid = require('uuid/v4');
 const sanitize = require('sanitize-filename');
@@ -29,7 +29,7 @@ function applyWebpackConfig(webpack_config) {
 }
 
 function withCRA(next_config = {}) {
-  const { src = 'src', public = 'public', pages, build = 'build' } =
+  const { src = 'src', public = 'public', pages, build = 'build', static } =
     next_config.cra || {};
 
   const appSrc = resolve(src);
@@ -38,9 +38,18 @@ function withCRA(next_config = {}) {
   const appIndexJs = join(appSrc, pages ? pages.index : 'index.js');
   const appHtml = join(appPublic, 'index.html');
   const appTypeDeclarations = join(appSrc, 'react-app-env.d.ts');
+  const appStatic = static && resolve(static);
 
   return Object.assign({}, next_config, {
-    cra: { appSrc, appPublic, appBuild, appIndexJs, appHtml, appTypeDeclarations },
+    cra: {
+      appSrc,
+      appPublic,
+      appBuild,
+      appIndexJs,
+      appHtml,
+      appTypeDeclarations,
+      appStatic,
+    },
 
     webpack(config, { dev }) {
       if (pages) {
@@ -56,6 +65,7 @@ function withCRA(next_config = {}) {
           plugins.push(
             new HtmlWebpackPlugin({
               template: `${loader}!${target}`,
+              filename: relative(appPublic, target),
               chunks: [name],
             })
           );
