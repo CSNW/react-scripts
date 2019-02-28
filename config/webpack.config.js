@@ -309,7 +309,7 @@ module.exports = function(webpackEnv) {
           use: [
             {
               options: {
-                formatter: require.resolve('react-dev-utils/eslintFormatter'),
+                formatter: require.resolve('@csnw/react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
                 // @remove-on-eject-begin
                 baseConfig: {
