@@ -47,7 +47,7 @@ const openBrowser = require('@csnw/react-dev-utils/openBrowser');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
-const applyConfig = require('../config/apply-config');
+const { applyWebpackConfig } = require('../config/apply-config');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
@@ -92,7 +92,7 @@ checkBrowsers(paths.appPath, isInteractive)
       // We have not found a port.
       return;
     }
-    const config = applyConfig(configFactory('development'));
+    const config = applyWebpackConfig(configFactory('development'));
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
     const useTypeScript = fs.existsSync(paths.appTsConfig);
