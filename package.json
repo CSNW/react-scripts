@@ -22,7 +22,6 @@
   "types": "./lib/react-app.d.ts",
   "dependencies": {
     "@babel/core": "7.2.2",
-    "@csnw/react-dev-utils": "git+https://github.com/CSNW/react-dev-utils.git#7749fcc",
     "@svgr/webpack": "4.1.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
@@ -60,6 +59,7 @@
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
     "react-app-polyfill": "^0.2.1",
+    "react-dev-utils": "^8.0.0",
     "resolve": "1.10.0",
     "sanitize-filename": "^1.6.1",
     "sass-loader": "7.1.0",

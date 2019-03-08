@@ -8,10 +8,10 @@
 // @remove-on-eject-end
 'use strict';
 
-const errorOverlayMiddleware = require('@csnw/react-dev-utils/errorOverlayMiddleware');
-const evalSourceMapMiddleware = require('@csnw/react-dev-utils/evalSourceMapMiddleware');
-const noopServiceWorkerMiddleware = require('@csnw/react-dev-utils/noopServiceWorkerMiddleware');
-const ignoredFiles = require('@csnw/react-dev-utils/ignoredFiles');
+const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
+const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
+const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
+const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const paths = require('./paths');
 const fs = require('fs');
 

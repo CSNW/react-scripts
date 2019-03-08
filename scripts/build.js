@@ -32,18 +32,18 @@ verifyTypeScriptSetup();
 // @remove-on-eject-end
 
 const path = require('path');
-const chalk = require('@csnw/react-dev-utils/chalk');
+const chalk = require('react-dev-utils/chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const bfj = require('bfj');
 const { applyWebpackConfig } = require('../config/apply-config');
 const configFactory = require('../config/webpack.config');
 const paths = require('../config/paths');
-const checkRequiredFiles = require('@csnw/react-dev-utils/checkRequiredFiles');
-const formatWebpackMessages = require('@csnw/react-dev-utils/formatWebpackMessages');
-const printHostingInstructions = require('@csnw/react-dev-utils/printHostingInstructions');
-const FileSizeReporter = require('@csnw/react-dev-utils/FileSizeReporter');
-const printBuildError = require('@csnw/react-dev-utils/printBuildError');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
+const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
+const printBuildError = require('react-dev-utils/printBuildError');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -70,7 +70,7 @@ const config = applyWebpackConfig(configFactory('production'));
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require('@csnw/react-dev-utils/browsersHelper');
+const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // First, read the current file sizes in build directory.
