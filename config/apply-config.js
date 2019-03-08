@@ -1,20 +1,24 @@
-const { join, resolve, relative } = require('path');
+const { join, resolve, relative, basename, extname } = require('path');
 const { existsSync } = require('fs');
 const uuid = require('uuid/v4');
 const sanitize = require('sanitize-filename');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const mri = require('mri');
+const walkSync = require('walk-sync');
 
 function applyPaths(paths) {
   const { dir, outdir } = resolveArgs();
+  const src = join(dir, 'src');
+  const static_files = join(dir, 'static');
+  const pages = resolvePages(dir);
 
   return Object.assign({}, paths, {
-    src: join(dir, 'src'),
-    static_files: join(dir, 'static'),
+    appSrc: src,
+    appPublic: static_files,
     appBuild: outdir,
-    appIndexJs: join(dir, 'src', 'index.js'),
-    appHtml: join(dir, 'static', 'index.html'),
-    appTypeDeclarations: join(dir, 'src', 'react-app-env.d.ts'),
+    appIndexJs: pages ? join(dir, pages.index) : join(src, 'index.js'),
+    appHtml: join(static_files, 'index.html'),
+    appTypeDeclarations: join(src, 'react-app-env.d.ts'),
   });
 }
 
@@ -33,11 +37,10 @@ function applyWebpackConfig(webpack_config) {
   });
 }
 
-function applyServerConfig(webpack_dev_server_config) {
-  const config = loadConfig();
-  if (!config || !config.server) return webpack_dev_server_config;
-
-  return config.server(webpack_dev_server_config);
+function applyServerConfig(webpack_dev_server_config, webpack_config) {
+  if (!webpack_config || !webpack_config.devServer)
+    return webpack_dev_server_config;
+  return Object.assign({}, webpack_dev_server_config, webpack_config.devServer);
 }
 
 function loadConfig() {
@@ -51,8 +54,8 @@ function loadConfig() {
 function resolveArgs() {
   const args = mri(process.argv.slice(2), {
     alias: {
-      o: 'outdir'
-    }
+      o: 'outdir',
+    },
   });
   const dir = resolve(args._[0] || '.');
   const outdir = args.outdir ? resolve(args.outdir) : join(dir, 'build');
@@ -62,8 +65,8 @@ function resolveArgs() {
 
 function withCRA(next_config = {}) {
   const { dir = resolve('.') } = next_config;
-  const src = join(dir, 'src');
   const static_files = join(dir, 'static');
+  const pages = resolvePages(dir);
 
   return Object.assign({}, next_config, {
     webpack(config, { dev }) {
@@ -76,7 +79,7 @@ function withCRA(next_config = {}) {
           const name = sanitize(target);
           target = join(static_files, `${target}.html`);
 
-          entries[name] = join(src, entry);
+          entries[name] = join(dir, entry);
           plugins.push(
             new HtmlWebpackPlugin({
               template: `${loader}!${target}`,
@@ -110,6 +113,22 @@ function withCRA(next_config = {}) {
       return config;
     },
   });
+}
+
+function resolvePages(dir) {
+  const pages_dir = join(dir, 'pages');
+  if (!existsSync(pages_dir)) return;
+
+  const pages = walkSync(pages_dir);
+  const page_to_entry = {};
+  for (const path of pages) {
+    const entry = relative(dir, join(pages_dir, path));
+    const name = basename(entry, extname(entry));
+    
+    page_to_entry[name] = entry;
+  }
+
+  return page_to_entry;
 }
 
 module.exports = { applyPaths, applyWebpackConfig, applyServerConfig };
