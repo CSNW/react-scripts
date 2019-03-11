@@ -113,7 +113,7 @@ function withCRA(next_config = {}) {
             new HtmlWebpackPlugin({
               template: `${loader}!${target}`,
               filename: relative(static_files, target),
-              chunks: [name],
+              chunks: [name, client],
             })
           );
         }
