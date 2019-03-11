@@ -80,7 +80,9 @@ function withCRA(next_config = {}) {
       const external_js = rules.find(isExternalJs);
 
       if (!eslint || !application_js || !external_js) {
-        throw new Error('Could not find eslint rule or js rules in webpack module');
+        throw new Error(
+          'Could not find eslint rule or js rules in webpack module'
+        );
       }
 
       delete eslint.include;
@@ -95,25 +97,22 @@ function withCRA(next_config = {}) {
       if (pages) {
         const entries = {};
         const plugins = [];
-        const client = 'webpack_hot_dev_client';
         const loader = require.resolve('./html-loader');
-
-        if (dev) {
-          entries[client] = require.resolve(
-            'react-dev-utils/webpackHotDevClient'
-          );
-        }
 
         for (let [target, entry] of Object.entries(pages)) {
           const name = sanitize(target);
           target = join(static_files, `${target}.html`);
 
-          entries[name] = join(dir, entry);
+          entries[name] = [
+            dev && require.resolve('react-dev-utils/webpackHotDevClient'),
+            join(dir, entry),
+          ].filter(Boolean);
+
           plugins.push(
             new HtmlWebpackPlugin({
               template: `${loader}!${target}`,
               filename: relative(static_files, target),
-              chunks: [name, client],
+              chunks: [name],
             })
           );
         }
