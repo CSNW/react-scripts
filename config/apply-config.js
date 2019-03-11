@@ -6,6 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const mri = require('mri');
 const walkSync = require('walk-sync');
 
+const NODE_MODULES = /node_modules/;
+const ESLINT_LOADER = /eslint-loader/;
+const BABEL_LOADER = /babel-loader/;
+
 function applyPaths(paths) {
   const { dir, outdir } = resolveArgs();
   const src = join(dir, 'src');
@@ -70,10 +74,35 @@ function withCRA(next_config = {}) {
 
   return Object.assign({}, next_config, {
     webpack(config, { dev }) {
+      const rules = flatMap(config.module.rules, rule => rule.oneOf || rule);
+      const eslint = rules.find(isEslint);
+      const application_js = rules.find(isApplicationJs);
+      const external_js = rules.find(isExternalJs);
+
+      if (!eslint || !application_js || !external_js) {
+        throw new Error('Could not find eslint rule or js rules in webpack module');
+      }
+
+      delete eslint.include;
+      eslint.exclude = [NODE_MODULES];
+
+      delete application_js.include;
+      application_js.exclude = [NODE_MODULES];
+
+      delete external_js.exclude;
+      external_js.include = [NODE_MODULES];
+
       if (pages) {
         const entries = {};
         const plugins = [];
+        const client = 'webpack_hot_dev_client';
         const loader = require.resolve('./html-loader');
+
+        if (dev) {
+          entries[client] = require.resolve(
+            'react-dev-utils/webpackHotDevClient'
+          );
+        }
 
         for (let [target, entry] of Object.entries(pages)) {
           const name = sanitize(target);
@@ -124,11 +153,44 @@ function resolvePages(dir) {
   for (const path of pages) {
     const entry = relative(dir, join(pages_dir, path));
     const name = basename(entry, extname(entry));
-    
+
     page_to_entry[name] = entry;
   }
 
   return page_to_entry;
+}
+
+function flatMap(values, iterator, context) {
+  const flattened = [];
+
+  values.forEach((value, index) => {
+    const result = context
+      ? iterator.call(context, value, index, values)
+      : iterator(value, index, values);
+
+    Array.isArray(result)
+      ? flattened.push.apply(flattened, result)
+      : flattened.push(result);
+  });
+
+  return flattened;
+}
+
+function isEslint(rule) {
+  return (
+    rule.use &&
+    rule.use[0] &&
+    rule.use[0].loader &&
+    ESLINT_LOADER.test(rule.use[0].loader)
+  );
+}
+
+function isApplicationJs(rule) {
+  return rule.loader && BABEL_LOADER.test(rule.loader) && rule.include;
+}
+
+function isExternalJs(rule) {
+  return rule.loader && BABEL_LOADER.test(rule.loader) && rule.exclude;
 }
 
 module.exports = { applyPaths, applyWebpackConfig, applyServerConfig };
