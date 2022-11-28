@@ -104,7 +104,7 @@ function withCRA(next_config = {}) {
           target = join(static_files, `${target}.html`);
 
           entries[name] = [
-            dev && require.resolve('react-dev-utils/webpackHotDevClient'),
+            // dev && require.resolve('react-dev-utils/webpackHotDevClient'),
             join(dir, entry),
           ].filter(Boolean);
 
