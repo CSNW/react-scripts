@@ -27,7 +27,6 @@
   "dependencies": {
     "@babel/core": "7.21.0",
     "@svgr/webpack": "6.5.1",
-    "ajv": "^8.12.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "9.1.2",
     "babel-plugin-named-asset-import": "0.3.8",
@@ -45,7 +44,7 @@
     "html-webpack-plugin": "5.5.0",
     "identity-obj-proxy": "3.0.0",
     "immer": "^9.0.7",
-    "mini-css-extract-plugin": "2.7.3",
+    "mini-css-extract-plugin": "2.4.4",
     "mri": "^1.1.4",
     "pnp-webpack-plugin": "1.2.1",
     "postcss-flexbugs-fixes": "4.1.0",
