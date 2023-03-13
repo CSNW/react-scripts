@@ -74,25 +74,25 @@ function withCRA(next_config = {}) {
 
   return Object.assign({}, next_config, {
     webpack(config, { dev }) {
-      const rules = flatMap(config.module.rules, rule => rule.oneOf || rule);
-      const eslint = rules.find(isEslint);
-      const application_js = rules.find(isApplicationJs);
-      const external_js = rules.find(isExternalJs);
+      // const rules = flatMap(config.module.rules, rule => rule.oneOf || rule);
+      // const eslint = rules.find(isEslint);
+      // const application_js = rules.find(isApplicationJs);
+      // const external_js = rules.find(isExternalJs);
 
-      if (!eslint || !application_js || !external_js) {
-        throw new Error(
-          'Could not find eslint rule or js rules in webpack module'
-        );
-      }
-
-      delete eslint.include;
-      eslint.exclude = [NODE_MODULES];
-
-      delete application_js.include;
-      application_js.exclude = [NODE_MODULES];
-
-      delete external_js.exclude;
-      external_js.include = [NODE_MODULES];
+      // if (!eslint || !application_js || !external_js) {
+      //   throw new Error(
+      //     'Could not find eslint rule or js rules in webpack module'
+      //   );
+      // }
+// 
+      // delete eslint.include;
+      // eslint.exclude = [NODE_MODULES];
+// 
+      // delete application_js.include;
+      // application_js.exclude = [NODE_MODULES];
+// 
+      // delete external_js.exclude;
+      // external_js.include = [NODE_MODULES];
 
       if (pages) {
         const entries = {};
