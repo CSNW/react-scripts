@@ -65,7 +65,8 @@
   },
   "devDependencies": {
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-dom": "^16.3.2",
+    "webpack-cli": "^5.0.1"
   },
   "browserslist": [
     ">0.2%",

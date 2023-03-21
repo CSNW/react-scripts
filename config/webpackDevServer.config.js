@@ -84,9 +84,7 @@ module.exports = function(proxy, allowedHost) {
       // It will still show compile warnings and errors with this setting.
       logging: 'none',
       webSocketURL: {
-        hostname: '0.0.0.0',
-        pathname: '/ws',
-        port: '8080',
+        hostname: allowedHost,
       },
       overlay: false,
     },
@@ -107,7 +105,7 @@ module.exports = function(proxy, allowedHost) {
       // We do this in development to avoid hitting the production cache if
       // it used the same host and port.
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
-      devServer.app.use(noopServiceWorkerMiddleware());
+      devServer.app.use(noopServiceWorkerMiddleware('/'));
     },
   };
 };
