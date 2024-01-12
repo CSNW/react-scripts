@@ -48,8 +48,6 @@ function verifyTypeScriptSetup() {
     firstTimeSetup = true;
   }
 
-  const isYarn = fs.existsSync(paths.yarnLockFile);
-
   // Ensure typescript is installed
   let ts;
   try {
@@ -70,7 +68,7 @@ function verifyTypeScriptSetup() {
         chalk.cyan.bold('typescript'),
         'by running',
         chalk.cyan.bold(
-          isYarn ? 'yarn add typescript' : 'npm install typescript'
+          'npm install typescript'
         ) + '.'
       )
     );
