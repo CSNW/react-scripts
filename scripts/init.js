@@ -120,19 +120,6 @@ module.exports = function(
     );
   }
 
-  // Copy the files for the user
-  const templatePath = template
-    ? path.resolve(originalDirectory, template)
-    : path.join(ownPath, useTypeScript ? 'template-typescript' : 'template');
-  if (fs.existsSync(templatePath)) {
-    fs.copySync(templatePath, appPath);
-  } else {
-    console.error(
-      `Could not locate supplied template: ${chalk.green(templatePath)}`
-    );
-    return;
-  }
-
   // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
   // See: https://github.com/npm/npm/issues/1862
   try {
