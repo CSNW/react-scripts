@@ -1,12 +1,12 @@
 {
   "name": "@csnw/react-scripts",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Configuration and scripts for Create React App.",
   "repository": "CSNW/create-react-app",
   "license": "MIT",
   "engines": {
-    "node": "18.19.1",
-    "npm": "10.2.4"
+    "node": "20.9.0",
+    "npm": "10.1.0"
   },
   "os": [
     "win32"
