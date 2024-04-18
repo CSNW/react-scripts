@@ -22,7 +22,6 @@ function applyPaths(paths) {
     appBuild: outdir,
     appIndexJs: pages ? join(dir, pages.index) : join(src, 'index.js'),
     appHtml: join(static_files, 'index.html'),
-    appTypeDeclarations: join(src, 'react-app-env.d.ts'),
   });
 }
 
