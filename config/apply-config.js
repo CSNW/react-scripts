@@ -69,34 +69,27 @@ function resolveArgs() {
 function withCRA(next_config = {}) {
   const { dir = resolve('.') } = next_config;
   const static_files = join(dir, 'static');
+  const template_files = join(dir, 'src/templates');
   const pages = resolvePages(dir);
 
   return Object.assign({}, next_config, {
     webpack(config, { dev }) {
-      // const rules = flatMap(config.module.rules, rule => rule.oneOf || rule);
-      // const eslint = rules.find(isEslint);
-      // const application_js = rules.find(isApplicationJs);
-      // const external_js = rules.find(isExternalJs);
+      const loader = require.resolve('./html-loader');
+      const plugins = [];
 
-      // if (!eslint || !application_js || !external_js) {
-      //   throw new Error(
-      //     'Could not find eslint rule or js rules in webpack module'
-      //   );
-      // }
-// 
-      // delete eslint.include;
-      // eslint.exclude = [NODE_MODULES];
-// 
-      // delete application_js.include;
-      // application_js.exclude = [NODE_MODULES];
-// 
-      // delete external_js.exclude;
-      // external_js.include = [NODE_MODULES];
+      if (existsSync(template_files)) {
+        const templates = walkSync(template_files);
+        for (let template of templates) {
+          plugins.push(
+            new HtmlWebpackPlugin({
+              template: `${loader}!${template}`
+            })
+          );
+        }
+      }
 
       if (pages) {
         const entries = {};
-        const plugins = [];
-        const loader = require.resolve('./html-loader');
 
         for (let [target, entry] of Object.entries(pages)) {
           const name = sanitize(target);

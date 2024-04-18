@@ -378,11 +378,6 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      new CopyPlugin({
-        patterns: [
-          {from: 'templates/', to: 'templates/'}
-        ]
-      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
