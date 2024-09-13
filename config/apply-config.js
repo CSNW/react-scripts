@@ -1,6 +1,6 @@
 const { join, resolve, relative, basename, extname } = require('path');
 const { existsSync } = require('fs');
-const uuid = require('uuid/v4');
+const { v4: uuid} = require('uuid');
 const sanitize = require('sanitize-filename');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const mri = require('mri');
