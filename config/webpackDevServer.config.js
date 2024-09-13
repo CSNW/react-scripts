@@ -10,7 +10,7 @@ const fs = require('fs');
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 
-module.exports = function(proxy, allowedHost) {
+module.exports = function(proxy, allowedHost, port) {
   const disableFirewall = !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
@@ -43,6 +43,8 @@ module.exports = function(proxy, allowedHost) {
       // as we specified in the config. In development, we always serve from /.
       publicPath: '/',
     },
+    port: port,
+    host,
     static: {
       // By default WebpackDevServer serves physical files from current directory
       // in addition to all the virtual build products that it serves from memory.
@@ -68,8 +70,9 @@ module.exports = function(proxy, allowedHost) {
       },
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
-    https: protocol === 'https',
-    host,
+    server: {
+      type: protocol
+    },
     historyApiFallback: false,
     client: {
       // Silence WebpackDevServer's own logs since they're generally not useful.
@@ -81,7 +84,7 @@ module.exports = function(proxy, allowedHost) {
       overlay: false,
     },
     proxy,
-    onBeforeSetupMiddleware(devServer) {
+    setupMiddlewares: (middlewares, devServer) => {
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons
         require(paths.proxySetup)(devServer.app);
@@ -98,6 +101,7 @@ module.exports = function(proxy, allowedHost) {
       // it used the same host and port.
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
       devServer.app.use(noopServiceWorkerMiddleware('/'));
+      return middlewares;
     },
   };
 };
