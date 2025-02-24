@@ -6,7 +6,7 @@
   "license": "MIT",
   "engines": {
     "node": "20.18.2",
-    "npm": "10.8.1"
+    "npm": "10.8.2"
   },
   "os": [
     "win32"
