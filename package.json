@@ -1,6 +1,6 @@
 {
   "name": "@csnw/react-scripts",
-  "version": "2.13.0-rc.0",
+  "version": "2.13.0-rc.1",
   "description": "Configuration and scripts for Create React App.",
   "repository": "CSNW/create-react-app",
   "license": "MIT",
