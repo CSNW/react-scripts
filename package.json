@@ -5,8 +5,8 @@
   "repository": "CSNW/create-react-app",
   "license": "MIT",
   "engines": {
-    "node": "20.18.2",
-    "npm": "10.8.2"
+    "node": "22.14.0",
+    "npm": "10.9.2"
   },
   "os": [
     "win32"
